@@ -34,11 +34,6 @@ namespace OpenIddict.Models
     public class OpenIddictApplication<TKey, TAuthorization, TToken> where TKey : IEquatable<TKey>
     {
         /// <summary>
-        /// Gets the list of the authorizations associated with this application.
-        /// </summary>
-        public virtual IList<TAuthorization> Authorizations { get; } = new List<TAuthorization>();
-
-        /// <summary>
         /// Gets or sets the client identifier
         /// associated with the current application.
         /// </summary>
@@ -73,11 +68,6 @@ namespace OpenIddict.Models
         /// associated with the current application.
         /// </summary>
         public virtual string RedirectUri { get; set; }
-
-        /// <summary>
-        /// Gets the list of the tokens associated with this application.
-        /// </summary>
-        public virtual IList<TToken> Tokens { get; } = new List<TToken>();
 
         /// <summary>
         /// Gets or sets the application type

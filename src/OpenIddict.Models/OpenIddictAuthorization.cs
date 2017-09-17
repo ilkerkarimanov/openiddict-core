@@ -34,11 +34,6 @@ namespace OpenIddict.Models
     public class OpenIddictAuthorization<TKey, TApplication, TToken> where TKey : IEquatable<TKey>
     {
         /// <summary>
-        /// Gets or sets the application associated with the current authorization.
-        /// </summary>
-        public virtual TApplication Application { get; set; }
-
-        /// <summary>
         /// Gets or sets the unique identifier
         /// associated with the current authorization.
         /// </summary>
@@ -55,10 +50,6 @@ namespace OpenIddict.Models
         /// </summary>
         public virtual string Subject { get; set; }
 
-        /// <summary>
-        /// Gets or sets the list of tokens
-        /// associated with the current authorization.
-        /// </summary>
-        public virtual IList<TToken> Tokens { get; } = new List<TToken>();
+        public TKey ApplicationId { get; set; }
     }
 }
