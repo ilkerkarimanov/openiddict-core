@@ -264,19 +264,21 @@ namespace OpenIddict.EntityFrameworkCore
                     throw new InvalidOperationException("The authorization associated with the token cannot be found.");
                 }
 
-                authorization.Tokens.Add(token);
+                token.AuthorizationId = authorization.Id;
             }
 
             else
             {
                 var key = await GetIdAsync(token, cancellationToken);
-
-                // Try to retrieve the authorization associated with the token.
-                // If none can be found, assume that no authorization is attached.
-                var authorization = await Authorizations.SingleOrDefaultAsync(element => element.Tokens.Any(t => t.Id.Equals(key)));
-                if (authorization != null)
-                {
-                    authorization.Tokens.Remove(token);
+                var tokens = Tokens.Where(t => t.Id.Equals(key));
+                if (tokens.Any()) {
+                    // Try to retrieve the authorization associated with the token.
+                    // If none can be found, assume that no authorization is attached.
+                    var authorization = await Authorizations.SingleOrDefaultAsync(element => element.Id.Equals(token.AuthorizationId));
+                    if (authorization != null)
+                    {
+                        Tokens.Remove(token);
+                    }
                 }
             }
         }
@@ -307,19 +309,22 @@ namespace OpenIddict.EntityFrameworkCore
                     throw new InvalidOperationException("The application associated with the token cannot be found.");
                 }
 
-                application.Tokens.Add(token);
+                token.ApplicationId = application.Id;
             }
 
             else
             {
                 var key = await GetIdAsync(token, cancellationToken);
-
-                // Try to retrieve the application associated with the token.
-                // If none can be found, assume that no application is attached.
-                var application = await Applications.SingleOrDefaultAsync(element => element.Tokens.Any(t => t.Id.Equals(key)));
-                if (application != null)
+                var tokens = Tokens.Where(x => x.Id.Equals(key));
+                if (tokens.Any())
                 {
-                    application.Tokens.Remove(token);
+                    // Try to retrieve the application associated with the token.
+                    // If none can be found, assume that no application is attached.
+                    var application = await Applications.SingleOrDefaultAsync(element => element.Id.Equals(token.AuthorizationId));
+                    if (application != null)
+                    {
+                        Tokens.Remove(token);
+                    }
                 }
             }
         }

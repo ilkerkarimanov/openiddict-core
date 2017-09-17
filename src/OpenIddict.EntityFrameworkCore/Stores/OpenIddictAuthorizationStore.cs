@@ -118,11 +118,10 @@ namespace OpenIddict.EntityFrameworkCore
         {
             var key = ConvertIdentifierFromString(client);
 
-            return (from application in Applications
-                    where application.Id.Equals(key)
-                    from authorization in application.Authorizations
-                    where authorization.Subject == subject
-                    select authorization).FirstOrDefaultAsync();
+            var query = (from authorization in Authorizations
+                         where authorization.ApplicationId.Equals(key) && authorization.Subject == subject
+                         select authorization).FirstOrDefaultAsync();
+            return query;
         }
 
         /// <summary>

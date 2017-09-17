@@ -79,6 +79,16 @@ namespace OpenIddict.EntityFrameworkCore
         protected DbSet<TApplication> Applications => Context.Set<TApplication>();
 
         /// <summary>
+        /// Gets the database set corresponding to the <typeparamref name="TAuthorization"/> entity.
+        /// </summary>
+        protected DbSet<TAuthorization> Authorizations => Context.Set<TAuthorization>();
+
+        /// <summary>
+        /// Gets the database set corresponding to the <typeparamref name="TToken"/> entity.
+        /// </summary>
+        protected DbSet<TToken> Tokens => Context.Set<TToken>();
+
+        /// <summary>
         /// Creates a new application.
         /// </summary>
         /// <param name="application">The application to create.</param>
@@ -318,10 +328,9 @@ namespace OpenIddict.EntityFrameworkCore
                 throw new ArgumentNullException(nameof(application));
             }
 
-            var query = from entity in Applications
-                        where entity.Id.Equals(application.Id)
-                        from token in entity.Tokens
-                        select token.Id;
+            var query = from entity in Tokens
+                        where entity.ApplicationId.Equals(application.Id)
+                        select entity.Id;
 
             var tokens = new List<string>();
 

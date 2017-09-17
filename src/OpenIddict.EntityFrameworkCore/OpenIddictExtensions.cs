@@ -225,16 +225,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 entity.HasIndex(application => application.ClientId)
                       .IsUnique(unique: true);
 
-                entity.HasMany(application => application.Authorizations)
-                      .WithOne(authorization => authorization.Application)
-                      .HasForeignKey("ApplicationId")
-                      .IsRequired(required: false);
-
-                entity.HasMany(application => application.Tokens)
-                      .WithOne(token => token.Application)
-                      .HasForeignKey("ApplicationId")
-                      .IsRequired(required: false);
-
                 entity.ToTable("OpenIddictApplications");
             });
 
@@ -243,10 +233,11 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 entity.HasKey(authorization => authorization.Id);
 
-                entity.HasMany(application => application.Tokens)
-                      .WithOne(token => token.Authorization)
-                      .HasForeignKey("AuthorizationId")
-                      .IsRequired(required: false);
+                //entity.Property(x => x.ApplicationId).IsRequired();
+                entity.HasOne<TApplication>()
+                .WithMany()
+                .HasForeignKey(x => x.ApplicationId)
+                .OnDelete(EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
 
                 entity.ToTable("OpenIddictAuthorizations");
             });
@@ -263,6 +254,18 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Entity<TToken>(entity =>
             {
                 entity.HasKey(token => token.Id);
+
+                //entity.Property(x => x.ApplicationId).IsRequired();
+                entity.HasOne<TApplication>()
+                .WithMany()
+                .HasForeignKey(x => x.ApplicationId)
+                .OnDelete(EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
+
+                //entity.Property(x => x.AuthorizationId).IsRequired();
+                entity.HasOne<TAuthorization>()
+                .WithMany()
+                .HasForeignKey(x => x.AuthorizationId)
+                .OnDelete(EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
 
                 entity.ToTable("OpenIddictTokens");
             });
