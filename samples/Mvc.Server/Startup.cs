@@ -52,11 +52,15 @@ namespace Mvc.Server
                 options.ClaimsIdentity.RoleClaimType = OpenIdConnectConstants.Claims.Role;
             });
 
+            services.AddMongoDbContext();
+
             // Register the OpenIddict services.
             services.AddOpenIddict(options =>
             {
                 // Register the Entity Framework stores.
-                options.AddEntityFrameworkCoreStores<ApplicationDbContext>();
+                //options.AddEntityFrameworkCoreStores<ApplicationDbContext>();
+
+                options.AddMongoCoreStores();
 
                 // Register the ASP.NET Core MVC binder used by OpenIddict.
                 // Note: if you don't call this method, you won't be able to
@@ -168,7 +172,9 @@ namespace Mvc.Server
 
             // Seed the database with the sample applications.
             // Note: in a real world application, this step should be part of a setup script.
-            InitializeAsync(app.ApplicationServices, CancellationToken.None).GetAwaiter().GetResult();
+            //InitializeAsync(app.ApplicationServices, CancellationToken.None).GetAwaiter().GetResult();
+            MongoSeeder.InitializeMongoClientsAsync(app.ApplicationServices, CancellationToken.None).GetAwaiter().GetResult();
+
         }
 
         private async Task InitializeAsync(IServiceProvider services, CancellationToken cancellationToken)

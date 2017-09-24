@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\OpenIddict.Mongo\OpenIddict.Mongo.csproj" />
     <ProjectReference Include="..\..\src\OpenIddict\OpenIddict.csproj" />
     <ProjectReference Include="..\..\src\OpenIddict.EntityFrameworkCore\OpenIddict.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\OpenIddict.Mvc\OpenIddict.Mvc.csproj" />
